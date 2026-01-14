@@ -21,13 +21,22 @@ function securityHeaders(req: express.Request, res: express.Response, next: expr
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   }
   
-  // Content Security Policy - relaxed for development, stricter in production
-  if (process.env.NODE_ENV === 'production') {
-    res.setHeader(
-      'Content-Security-Policy',
-      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:;"
-    );
-  }
+  // Content Security Policy - allow necessary resources
+  // Note: CSP is permissive to avoid blocking legitimate resources
+  // In production, you may want to tighten this based on your needs
+  const csp = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:",
+    "style-src 'self' 'unsafe-inline' https:",
+    "img-src 'self' data: https: blob:",
+    "font-src 'self' data: https:",
+    "connect-src 'self' https: wss: ws:",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'"
+  ].join('; ');
+  
+  res.setHeader('Content-Security-Policy', csp);
   
   next();
 }
