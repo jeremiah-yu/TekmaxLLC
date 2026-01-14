@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response, NextFunction } from 'express';
 import { query } from '../database/connection';
 import { authenticate, authorize, AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
@@ -11,7 +11,7 @@ const router = express.Router();
 router.use(authenticate);
 
 // Create order
-router.post('/', authorize('restaurant_owner', 'admin'), async (req: AuthRequest, res, next) => {
+router.post('/', authorize('restaurant_owner', 'admin'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const {
       restaurantId,
@@ -121,7 +121,7 @@ router.post('/', authorize('restaurant_owner', 'admin'), async (req: AuthRequest
 });
 
 // Get orders
-router.get('/', async (req: AuthRequest, res, next) => {
+router.get('/', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     let orders;
 
@@ -156,7 +156,7 @@ router.get('/', async (req: AuthRequest, res, next) => {
 });
 
 // Get single order
-router.get('/:id', async (req: AuthRequest, res, next) => {
+router.get('/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const order = await getOrderWithItems(req.params.id);
 
@@ -182,7 +182,7 @@ router.get('/:id', async (req: AuthRequest, res, next) => {
 });
 
 // Update order status
-router.patch('/:id/status', authorize('restaurant_owner', 'admin'), async (req: AuthRequest, res, next) => {
+router.patch('/:id/status', authorize('restaurant_owner', 'admin'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { status } = req.body;
     const validStatuses = ['pending', 'confirmed', 'preparing', 'ready', 'assigned', 'picked_up', 'in_transit', 'delivered', 'cancelled'];

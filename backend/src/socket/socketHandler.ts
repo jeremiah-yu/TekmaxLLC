@@ -7,7 +7,7 @@ interface AuthenticatedSocket extends Socket {
   userRole?: string;
 }
 
-export function setupSocketIO(io: Server): void {
+export function setupSocketIO(io: Server): { emitDeliveryUpdate: (deliveryId: string, data: any) => void; notifyRestaurant: (restaurantId: string, event: string, data: any) => void } {
   // Authentication middleware
   io.use(async (socket: AuthenticatedSocket, next) => {
     try {

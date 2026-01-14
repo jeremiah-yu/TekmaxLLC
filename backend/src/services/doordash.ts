@@ -74,7 +74,7 @@ export async function createDoorDashDelivery(
         throw new Error(`DoorDash API error: ${response.status} - ${errorText}`);
       }
 
-      const data = await response.json();
+      const data = await response.json() as any;
       return {
         external_delivery_id: data.external_delivery_id || `DD-${Date.now()}`,
         delivery_id: data.id || data.delivery_id || `dd_${Math.random().toString(36).substr(2, 9)}`,

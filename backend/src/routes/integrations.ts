@@ -48,7 +48,7 @@ router.get('/settings', authorize('restaurant_owner'), async (req: AuthRequest, 
 });
 
 // Update restaurant settings (all settings including location, dispatch, notifications, etc.)
-router.put('/settings', authorize('restaurant_owner'), async (req: AuthRequest, res, next) => {
+router.put('/settings', authorize('restaurant_owner'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const {
       // Third-party integrations
@@ -236,7 +236,7 @@ router.put('/settings', authorize('restaurant_owner'), async (req: AuthRequest, 
 });
 
 // Get or generate API key for merchant
-router.get('/api-key', authorize('restaurant_owner'), async (req: AuthRequest, res, next) => {
+router.get('/api-key', authorize('restaurant_owner'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     // Get user's restaurant
     const restaurantResult = await query(
@@ -295,7 +295,7 @@ router.get('/api-key', authorize('restaurant_owner'), async (req: AuthRequest, r
 });
 
 // Generate integration email
-router.post('/integration-email', authorize('restaurant_owner'), async (req: AuthRequest, res, next) => {
+router.post('/integration-email', authorize('restaurant_owner'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     // Get user's restaurant
     const restaurantResult = await query(
@@ -408,7 +408,7 @@ router.get('/gloria-food/api-key', authorize('restaurant_owner'), async (req: Au
 });
 
 // Get webhook config for Gloria Food
-router.get('/gloria-food/webhook-config', authorize('restaurant_owner'), async (req: AuthRequest, res, next) => {
+router.get('/gloria-food/webhook-config', authorize('restaurant_owner'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     // Get user's restaurant
     const restaurantResult = await query(

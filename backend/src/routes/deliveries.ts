@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response, NextFunction } from 'express';
 import { query } from '../database/connection';
 import { authenticate, authorize, AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
@@ -10,7 +10,7 @@ const router = express.Router();
 router.use(authenticate);
 
 // Get deliveries
-router.get('/', async (req: AuthRequest, res, next) => {
+router.get('/', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     let deliveries;
 
@@ -74,7 +74,7 @@ router.get('/', async (req: AuthRequest, res, next) => {
 });
 
 // Refresh DoorDash delivery status
-router.post('/:id/refresh-status', authorize('restaurant_owner', 'admin'), async (req: AuthRequest, res, next) => {
+router.post('/:id/refresh-status', authorize('restaurant_owner', 'admin'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const delivery = await query('SELECT * FROM deliveries WHERE id = $1', [req.params.id]);
     if (delivery.rows.length === 0) {
@@ -116,7 +116,7 @@ router.post('/:id/refresh-status', authorize('restaurant_owner', 'admin'), async
 });
 
 // Assign delivery to rider
-router.post('/:id/assign', authorize('restaurant_owner', 'admin'), async (req: AuthRequest, res, next) => {
+router.post('/:id/assign', authorize('restaurant_owner', 'admin'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { riderId } = req.body;
 
@@ -205,7 +205,7 @@ router.post('/:id/accept', authorize('rider'), async (req: AuthRequest, res, nex
 });
 
 // Update delivery status (picked up, in transit, delivered)
-router.patch('/:id/status', authorize('rider'), async (req: AuthRequest, res, next) => {
+router.patch('/:id/status', authorize('rider'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { status } = req.body;
     const validStatuses = ['picked_up', 'in_transit', 'delivered'];
@@ -227,6 +227,9 @@ router.patch('/:id/status', authorize('rider'), async (req: AuthRequest, res, ne
     if (delivery.rows.length === 0) {
       throw new AppError('Delivery not found or not assigned to you', 404);
     }
+
+    const deliveryData = delivery.rows[0];
+    const oldStatus = deliveryData.status;
 
     const updateFields: any = { status };
     if (status === 'picked_up') {

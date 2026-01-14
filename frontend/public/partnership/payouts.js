@@ -1,25 +1,24 @@
 // Load Payouts Data
 async function loadPayouts() {
     try {
-        // Try to fetch from API
-        let payoutsData = null;
-        try {
-            payoutsData = await apiRequest('/partnership/payouts');
-        } catch (apiError) {
-            console.log('Payouts API endpoint not available');
-        }
-        
-        const totalPayouts = payoutsData?.total_payouts || 0;
-        const thisMonthPayouts = payoutsData?.this_month_payouts || 0;
-        const pendingPayouts = payoutsData?.pending_payouts || 0;
-        const nextPayout = payoutsData?.next_payout || 0;
-        const payouts = payoutsData?.payouts || [];
+        // Mock payouts data
+        const totalPayouts = 500.00;
+        const thisMonthPayouts = 188.80;
+        const pendingPayouts = 50.00;
+        const nextPayout = 50.00;
         
         // Update summary
         document.getElementById('totalPayouts').textContent = `$${totalPayouts.toFixed(2)}`;
         document.getElementById('thisMonthPayouts').textContent = `$${thisMonthPayouts.toFixed(2)}`;
         document.getElementById('pendingPayouts').textContent = `$${pendingPayouts.toFixed(2)}`;
         document.getElementById('nextPayout').textContent = `$${nextPayout.toFixed(2)}`;
+        
+        // Mock payouts history
+        const payouts = [
+            { date: '2024-01-15', amount: 188.80, method: 'Bank Transfer', status: 'Completed', reference: 'PAY-2024-001' },
+            { date: '2024-01-01', amount: 150.00, method: 'Bank Transfer', status: 'Completed', reference: 'PAY-2023-012' },
+            { date: '2024-01-20', amount: 50.00, method: 'Bank Transfer', status: 'Pending', reference: 'PAY-2024-002' },
+        ];
         
         const payoutsTableBody = document.getElementById('payoutsTableBody');
         if (payouts.length === 0) {
@@ -31,24 +30,20 @@ async function loadPayouts() {
         } else {
             payoutsTableBody.innerHTML = payouts.map(payout => `
                 <tr>
-                    <td>${new Date(payout.date || payout.created_at).toLocaleDateString()}</td>
-                    <td><strong>$${parseFloat(payout.amount || 0).toFixed(2)}</strong></td>
-                    <td>${payout.method || 'Bank Transfer'}</td>
+                    <td>${new Date(payout.date).toLocaleDateString()}</td>
+                    <td><strong>$${payout.amount.toFixed(2)}</strong></td>
+                    <td>${payout.method}</td>
                     <td>
-                        <span class="status-badge status-${(payout.status || 'pending').toLowerCase()}">
-                            ${payout.status || 'Pending'}
+                        <span class="status-badge status-${payout.status.toLowerCase()}">
+                            ${payout.status}
                         </span>
                     </td>
-                    <td>${payout.reference || payout.id || 'N/A'}</td>
+                    <td>${payout.reference}</td>
                 </tr>
             `).join('');
         }
     } catch (error) {
         console.error('Error loading payouts:', error);
-        document.getElementById('totalPayouts').textContent = '$0.00';
-        document.getElementById('thisMonthPayouts').textContent = '$0.00';
-        document.getElementById('pendingPayouts').textContent = '$0.00';
-        document.getElementById('nextPayout').textContent = '$0.00';
         document.getElementById('payoutsTableBody').innerHTML = `
             <tr>
                 <td colspan="5" class="loading-cell">Error loading payouts. Please try again.</td>

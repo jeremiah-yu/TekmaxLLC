@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response, NextFunction } from 'express';
 import { query } from '../database/connection';
 import { authenticate, authorize, AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
@@ -8,7 +8,7 @@ const router = express.Router();
 router.use(authenticate);
 
 // Update location (rider)
-router.post('/location', authorize('rider'), async (req: AuthRequest, res, next) => {
+router.post('/location', authorize('rider'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { deliveryId, latitude, longitude, accuracy, heading, speed } = req.body;
 
@@ -51,7 +51,7 @@ router.post('/location', authorize('rider'), async (req: AuthRequest, res, next)
 });
 
 // Get tracking data for delivery
-router.get('/:deliveryId', async (req: AuthRequest, res, next) => {
+router.get('/:deliveryId', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { deliveryId } = req.params;
 

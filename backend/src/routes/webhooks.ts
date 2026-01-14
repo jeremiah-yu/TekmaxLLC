@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { query } from '../database/connection';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
@@ -10,7 +10,7 @@ import { notifyNewOrder } from '../services/notifications';
 const router = express.Router();
 
 // Gloria Food webhook endpoint
-router.post('/gloria-food', async (req, res, next) => {
+router.post('/gloria-food', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const signature = req.headers['x-gloria-signature'] as string;
     const apiKey = req.headers['x-api-key'] as string || req.body.api_key;
@@ -130,7 +130,7 @@ router.post('/gloria-food', async (req, res, next) => {
 });
 
 // DoorDash webhook endpoint
-router.post('/doordash', async (req, res, next) => {
+router.post('/doordash', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const signature = req.headers['x-doordash-signature'] as string;
     const eventType = req.body.event_type || req.body.type;
@@ -178,7 +178,7 @@ router.post('/doordash', async (req, res, next) => {
 });
 
 // Generic webhook endpoint (no auth required, uses API key in header)
-router.post('/:platform', async (req, res, next) => {
+router.post('/:platform', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { platform } = req.params;
     const apiKey = req.headers['x-api-key'] as string;
@@ -216,7 +216,7 @@ router.post('/:platform', async (req, res, next) => {
 // Webhook config management (requires auth)
 router.use(authenticate);
 
-router.get('/configs', async (req: AuthRequest, res, next) => {
+router.get('/configs', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     let configs;
 

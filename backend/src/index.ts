@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { initializeDatabase } from './database/connection';
@@ -55,6 +56,10 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/restaurants', restaurantRoutes);
@@ -66,6 +71,20 @@ app.use('/api/webhooks', webhookRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/integrations', integrationRoutes);
 app.use('/api/notifications', notificationRoutes);
+
+// Serve static files from frontend/public
+const frontendPath = path.join(__dirname, '../../frontend/public');
+app.use(express.static(frontendPath));
+
+// Serve frontend routes (SPA fallback)
+app.get('*', (req, res) => {
+  // Don't serve HTML for API routes
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'API endpoint not found' });
+  }
+  // Serve login.html as default
+  res.sendFile(path.join(frontendPath, 'login.html'));
+});
 
 // Error handling
 app.use(errorHandler);

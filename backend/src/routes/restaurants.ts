@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response, NextFunction } from 'express';
 import { query } from '../database/connection';
 import { authenticate, authorize, AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
@@ -8,7 +8,7 @@ const router = express.Router();
 router.use(authenticate);
 
 // Create restaurant
-router.post('/', authorize('restaurant_owner', 'admin'), async (req: AuthRequest, res, next) => {
+router.post('/', authorize('restaurant_owner', 'admin'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const {
       name,
@@ -87,7 +87,7 @@ router.post('/', authorize('restaurant_owner', 'admin'), async (req: AuthRequest
 });
 
 // Get restaurants
-router.get('/', async (req: AuthRequest, res, next) => {
+router.get('/', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     let restaurants;
 
@@ -124,7 +124,7 @@ router.get('/', async (req: AuthRequest, res, next) => {
 });
 
 // Get single restaurant
-router.get('/:id', async (req: AuthRequest, res, next) => {
+router.get('/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const result = await query('SELECT * FROM restaurants WHERE id = $1', [req.params.id]);
 
@@ -146,7 +146,7 @@ router.get('/:id', async (req: AuthRequest, res, next) => {
 });
 
 // Get current user's restaurant
-router.get('/me/restaurant', authorize('restaurant_owner'), async (req: AuthRequest, res, next) => {
+router.get('/me/restaurant', authorize('restaurant_owner'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const result = await query(
       'SELECT * FROM restaurants WHERE owner_id = $1 LIMIT 1',
@@ -164,7 +164,7 @@ router.get('/me/restaurant', authorize('restaurant_owner'), async (req: AuthRequ
 });
 
 // Update restaurant
-router.put('/:id', authorize('restaurant_owner', 'admin'), async (req: AuthRequest, res, next) => {
+router.put('/:id', authorize('restaurant_owner', 'admin'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const {
       name,

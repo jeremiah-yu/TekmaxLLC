@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { query } from '../database/connection';
@@ -9,7 +9,7 @@ import { authenticate, AuthRequest } from '../middleware/auth';
 const router = express.Router();
 
 // Register
-router.post('/register', authRateLimiter, async (req, res, next) => {
+router.post('/register', authRateLimiter, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password, firstName, lastName, phone, role } = req.body;
 
@@ -65,7 +65,7 @@ router.post('/register', authRateLimiter, async (req, res, next) => {
 });
 
 // Login
-router.post('/login', authRateLimiter, async (req, res, next) => {
+router.post('/login', authRateLimiter, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
 
@@ -118,7 +118,7 @@ router.post('/login', authRateLimiter, async (req, res, next) => {
 });
 
 // Get current user
-router.get('/me', authenticate, async (req: AuthRequest, res, next) => {
+router.get('/me', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const result = await query(
       'SELECT id, email, role, first_name, last_name, phone FROM users WHERE id = $1',
@@ -183,7 +183,7 @@ router.patch('/profile', authenticate, async (req: AuthRequest, res, next) => {
 });
 
 // Change password
-router.patch('/change-password', authenticate, async (req: AuthRequest, res, next) => {
+router.patch('/change-password', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { currentPassword, newPassword } = req.body;
 

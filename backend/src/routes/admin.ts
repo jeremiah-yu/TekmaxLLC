@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response, NextFunction } from 'express';
 import { query } from '../database/connection';
 import { authenticate, authorize, AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
@@ -9,7 +9,7 @@ router.use(authenticate);
 router.use(authorize('admin'));
 
 // Dashboard stats
-router.get('/stats', async (req: AuthRequest, res, next) => {
+router.get('/stats', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const [
       totalOrders,

@@ -1,5 +1,12 @@
-// API Configuration
-const API_URL = 'http://localhost:3000/api';
+// API Configuration - Auto-detect based on current host
+const API_URL = (() => {
+  // If running in production (Render), use current host
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return `${window.location.protocol}//${window.location.host}/api`;
+  }
+  // Development: use localhost
+  return 'http://localhost:3000/api';
+})();
 
 // Detect which portal we're on
 function getPortalType() {

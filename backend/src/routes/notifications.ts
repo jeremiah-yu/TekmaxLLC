@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response, NextFunction } from 'express';
 import { query } from '../database/connection';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
@@ -6,7 +6,7 @@ import { AppError } from '../middleware/errorHandler';
 const router = express.Router();
 
 // Get notifications for current user
-router.get('/', authenticate, async (req: AuthRequest, res, next) => {
+router.get('/', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.user!.id;
     let restaurantId: string | undefined;
@@ -93,7 +93,7 @@ router.get('/unread-count', authenticate, async (req: AuthRequest, res, next) =>
 });
 
 // Mark notification as read
-router.patch('/:id/read', authenticate, async (req: AuthRequest, res, next) => {
+router.patch('/:id/read', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const userId = req.user!.id;
@@ -140,7 +140,7 @@ router.patch('/:id/read', authenticate, async (req: AuthRequest, res, next) => {
 });
 
 // Mark all notifications as read
-router.patch('/read-all', authenticate, async (req: AuthRequest, res, next) => {
+router.patch('/read-all', authenticate, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.user!.id;
     let restaurantId: string | undefined;

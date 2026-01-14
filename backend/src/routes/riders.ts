@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response, NextFunction } from 'express';
 import { query } from '../database/connection';
 import { authenticate, authorize, AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
@@ -8,7 +8,7 @@ const router = express.Router();
 router.use(authenticate);
 
 // Get riders
-router.get('/', async (req: AuthRequest, res, next) => {
+router.get('/', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     let riders;
 
@@ -41,7 +41,7 @@ router.get('/', async (req: AuthRequest, res, next) => {
 });
 
 // Get available riders
-router.get('/available', async (req: AuthRequest, res, next) => {
+router.get('/available', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const restaurantId = req.query.restaurantId as string;
 
@@ -99,7 +99,7 @@ router.post('/location', authorize('rider'), async (req: AuthRequest, res, next)
 });
 
 // Update rider availability
-router.patch('/availability', authorize('rider'), async (req: AuthRequest, res, next) => {
+router.patch('/availability', authorize('rider'), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { isAvailable, isOnline } = req.body;
 
