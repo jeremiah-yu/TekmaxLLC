@@ -8,6 +8,30 @@ import { initializeDatabase } from './database/connection';
 import { errorHandler } from './middleware/errorHandler';
 import { rateLimiter } from './middleware/rateLimiter';
 
+// Security headers middleware
+function securityHeaders(req: express.Request, res: express.Response, next: express.NextFunction) {
+  // Security headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  
+  // HSTS (HTTP Strict Transport Security) - only in production with HTTPS
+  if (process.env.NODE_ENV === 'production' && req.secure) {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  
+  // Content Security Policy - relaxed for development, stricter in production
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:;"
+    );
+  }
+  
+  next();
+}
+
 // Routes
 import authRoutes from './routes/auth';
 import restaurantRoutes from './routes/restaurants';
@@ -33,23 +57,54 @@ dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:3001',
-    methods: ['GET', 'POST'],
-  },
-});
 
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy for production (Render/Heroku)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Middleware
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3001',
+// CORS configuration - allow same origin in production (frontend served from backend)
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // In production, allow same origin (frontend served from backend)
+    if (process.env.NODE_ENV === 'production') {
+      // Allow requests with no origin (mobile apps, Postman, etc.) or same origin
+      if (!origin || origin.includes(process.env.FRONTEND_URL || '')) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Allow all in production for now
+      }
+    } else {
+      // Development: allow localhost
+      const allowedOrigins = ['http://localhost:3001', 'http://localhost:3000', 'http://127.0.0.1:3001', 'http://127.0.0.1:3000'];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
+  },
   credentials: true,
-}));
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
+};
+
+app.use(cors(corsOptions));
+
+// Security headers
+app.use(securityHeaders);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(rateLimiter);
+
+// Socket.IO configuration (after CORS setup)
+const io = new Server(httpServer, {
+  cors: corsOptions,
+});
 
 // Health check
 app.get('/health', (req, res) => {
