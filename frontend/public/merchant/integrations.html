@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrations - TekMaxLLC</title>
+    <link rel="stylesheet" href="/merchant/merchant.css">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Top Header - Dark Blue Bar -->
+    <header class="merchant-header">
+        <div class="merchant-logo">
+            <div class="merchant-logo-icon">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSP6FmX9MOjFsBpZlDOhSFMdQnUTRrgycWoHQ&s" alt="TekMaxLLC Logo" />
+            </div>
+            <span>TekMaxLLC</span>
+        </div>
+        <div class="merchant-header-actions">
+            <nav class="merchant-nav">
+                <a href="/merchant/dashboard.html" class="merchant-nav-link">Dashboard</a>
+                <a href="/merchant/orders.html" class="merchant-nav-link">Orders</a>
+                <a href="/merchant/analytics.html" class="merchant-nav-link">Reports</a>
+                <a href="/merchant/reviews.html" class="merchant-nav-link">Reviews</a>
+                <a href="/merchant/integrations.html" class="merchant-nav-link active">Integrations</a>
+            </nav>
+            <div class="merchant-user-dropdown">
+                <button class="merchant-icon-btn" id="userDropdownBtn" title="Profile">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                </button>
+                <div class="merchant-dropdown-menu" id="userDropdown">
+                    <a href="/merchant/profile.html" class="merchant-dropdown-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                        My Account
+                    </a>
+                    <a href="/merchant/settings.html" class="merchant-dropdown-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        Settings
+                    </a>
+                    <a href="#" class="merchant-dropdown-item" onclick="handleLogout()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                        Log Out
+                    </a>
+                </div>
+            </div>
+            <button class="merchant-icon-btn" id="notificationBtn" title="Notifications">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                </svg>
+                <span class="merchant-notification-badge">3</span>
+            </button>
+            <div class="merchant-notification-dropdown" id="notificationDropdown"></div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="merchant-integrations-container">
+        <!-- Left Sidebar -->
+        <aside class="merchant-integrations-sidebar">
+            <h1 class="merchant-integrations-title">Integrations</h1>
+            <p class="merchant-integrations-description">
+                Connect your online ordering or POS to automatically sync your orders with TekMax
+            </p>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="merchant-integrations-main">
+            <!-- Gloria Food Integration -->
+            <div class="merchant-integrations-section">
+                <h2 class="merchant-integrations-section-title">Gloria Food Integration</h2>
+                <p class="merchant-integrations-section-description">
+                    Connect your Gloria Food account to automatically sync orders. Configure your Gloria Food credentials below and use the webhook URL in your Gloria Food dashboard.
+                </p>
+                
+                <!-- Connection Status -->
+                <div class="merchant-integrations-status" id="gloriaFoodStatus">
+                    <span class="merchant-integrations-status-badge" id="gloriaFoodStatusBadge">Not Connected</span>
+                </div>
+
+                <!-- Gloria Food Credentials Form -->
+                <div class="merchant-integrations-form" id="gloriaFoodForm">
+                    <div class="merchant-integrations-api-field">
+                        <label class="merchant-integrations-field-label">Gloria Food API Key:</label>
+                        <input type="text" class="merchant-integrations-input" id="gloriaFoodApiKeyInput" placeholder="Enter your Gloria Food API Key">
+                    </div>
+                    <div class="merchant-integrations-api-field">
+                        <label class="merchant-integrations-field-label">Gloria Food Store ID:</label>
+                        <input type="text" class="merchant-integrations-input" id="gloriaFoodStoreIdInput" placeholder="Enter your Gloria Food Store ID">
+                    </div>
+                    <div class="merchant-integrations-api-field">
+                        <label class="merchant-integrations-field-label">Gloria Food Master Key:</label>
+                        <input type="text" class="merchant-integrations-input" id="gloriaFoodMasterKeyInput" placeholder="Enter your Gloria Food Master Key">
+                    </div>
+                    <button class="merchant-btn merchant-btn-primary" onclick="saveGloriaFoodSettings()">Save & Connect</button>
+                </div>
+
+                <!-- Webhook URL -->
+                <div class="merchant-integrations-api-field" id="gloriaFoodWebhookSection" style="margin-top: 1rem;">
+                    <label class="merchant-integrations-field-label">Webhook URL:</label>
+                    <div class="merchant-integrations-input-group">
+                        <input type="text" class="merchant-integrations-input" id="gloriaFoodWebhookUrlInput" placeholder="Loading webhook URL..." readonly>
+                        <button class="merchant-btn merchant-btn-secondary" onclick="copyGloriaFoodWebhookUrl()">Copy URL</button>
+                    </div>
+                    <p style="font-size: 0.875rem; color: #6b7280; margin-top: 0.5rem;">
+                        Use this webhook URL in your Gloria Food dashboard settings to receive order updates automatically. Copy this URL and paste it in your Gloria Food webhook configuration.
+                    </p>
+                </div>
+            </div>
+
+            <!-- DoorDash Integration -->
+            <div class="merchant-integrations-section">
+                <h2 class="merchant-integrations-section-title">DoorDash Integration</h2>
+                <p class="merchant-integrations-section-description">
+                    Connect your DoorDash account to automatically create delivery requests. Orders will be automatically sent to DoorDash 20-25 minutes after acceptance.
+                </p>
+                
+                <!-- Connection Status -->
+                <div class="merchant-integrations-status" id="doorDashStatus">
+                    <span class="merchant-integrations-status-badge" id="doorDashStatusBadge">Not Connected</span>
+                </div>
+
+                <!-- DoorDash Credentials Form -->
+                <div class="merchant-integrations-form" id="doorDashForm">
+                    <div class="merchant-integrations-api-field">
+                        <label class="merchant-integrations-field-label">DoorDash Developer ID:</label>
+                        <input type="text" class="merchant-integrations-input" id="doorDashDeveloperIdInput" placeholder="Enter your DoorDash Developer ID">
+                    </div>
+                    <div class="merchant-integrations-api-field">
+                        <label class="merchant-integrations-field-label">DoorDash Key ID:</label>
+                        <input type="text" class="merchant-integrations-input" id="doorDashKeyIdInput" placeholder="Enter your DoorDash Key ID">
+                    </div>
+                    <div class="merchant-integrations-api-field">
+                        <label class="merchant-integrations-field-label">DoorDash Signing Secret:</label>
+                        <input type="password" class="merchant-integrations-input" id="doorDashSigningSecretInput" placeholder="Enter your DoorDash Signing Secret">
+                    </div>
+                    <div class="merchant-integrations-api-field">
+                        <label class="merchant-integrations-field-label">DoorDash Merchant ID (Optional):</label>
+                        <input type="text" class="merchant-integrations-input" id="doorDashMerchantIdInput" placeholder="Enter your DoorDash Merchant ID (optional)">
+                    </div>
+                    <div class="merchant-integrations-api-field">
+                        <label class="merchant-integrations-field-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" id="doorDashSandboxInput" checked>
+                            <span>Use Sandbox Mode (for testing)</span>
+                        </label>
+                    </div>
+                    <button class="merchant-btn merchant-btn-primary" onclick="saveDoorDashSettings()">Save & Connect</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/app.js"></script>
+    <script src="/merchant/merchant-common.js"></script>
+    <script src="/merchant/notifications.js"></script>
+    <script src="/merchant/integrations.js"></script>
+</body>
+</html>

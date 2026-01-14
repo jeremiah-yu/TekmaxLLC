@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Sign Up - TekMax Delivery Platform</title>
+    <link rel="stylesheet" href="/partnership/login.css">
+</head>
+<body>
+    <div class="partner-container">
+        <!-- Left Section - Sign Up Form -->
+        <div class="partner-left">
+            <div class="partner-form-wrapper">
+                <h1 class="partner-title">Partner Sign Up</h1>
+                
+                <div class="error-message" id="errorMessage" style="display: none;">
+                    <svg class="error-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                    <span id="errorText"></span>
+                </div>
+
+                <form id="partnerSignupForm" class="partner-form">
+                    <!-- First Name Field -->
+                    <div class="form-group">
+                        <label for="signupFirstName" class="form-label">First Name</label>
+                        <input
+                            id="signupFirstName"
+                            name="firstName"
+                            type="text"
+                            required
+                            class="form-input"
+                            placeholder="First Name"
+                        />
+                    </div>
+
+                    <!-- Last Name Field -->
+                    <div class="form-group">
+                        <label for="signupLastName" class="form-label">Last Name</label>
+                        <input
+                            id="signupLastName"
+                            name="lastName"
+                            type="text"
+                            required
+                            class="form-input"
+                            placeholder="Last Name"
+                        />
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label for="signupEmail" class="form-label">Email</label>
+                        <input
+                            id="signupEmail"
+                            name="email"
+                            type="email"
+                            autocomplete="email"
+                            required
+                            class="form-input"
+                            placeholder="Enter your email"
+                        />
+                    </div>
+
+                    <!-- Phone Field -->
+                    <div class="form-group">
+                        <label for="signupPhone" class="form-label">Phone (Optional)</label>
+                        <input
+                            id="signupPhone"
+                            name="phone"
+                            type="tel"
+                            class="form-input"
+                            placeholder="Phone number"
+                        />
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label for="signupPassword" class="form-label">Password</label>
+                        <div class="password-wrapper">
+                            <input
+                                id="signupPassword"
+                                name="password"
+                                type="password"
+                                autocomplete="new-password"
+                                required
+                                class="form-input"
+                                placeholder="Enter Password"
+                            />
+                            <button
+                                type="button"
+                                id="signupPasswordToggle"
+                                class="password-toggle"
+                            >
+                                <svg class="eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Terms -->
+                    <p class="terms-text">
+                        By clicking Sign Up, you agree to TekMax's 
+                        <a href="#" class="terms-link">Terms of Service</a> 
+                        and acknowledge our 
+                        <a href="#" class="terms-link">privacy policy</a>
+                    </p>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="partnerSignupBtn" class="partner-submit-btn">
+                        <span class="button-loading" id="partnerSignupButtonLoading" style="display: none;">
+                            <svg class="spinner" viewBox="0 0 24 24">
+                                <circle class="spinner-circle" cx="12" cy="12" r="10" />
+                            </svg>
+                            Creating account...
+                        </span>
+                        <span id="partnerSignupButtonText">Sign Up</span>
+                    </button>
+                </form>
+
+                <!-- Sign In Link -->
+                <div class="signup-link">
+                    <p>Already a partner? <a href="/partnership/login.html" class="signup-link-text">Sign In</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section - Branding -->
+        <div class="partner-right">
+            <div class="partner-branding">
+                <div class="partner-logo">
+                    <div class="logo-icon">T</div>
+                    <span class="logo-text">TekMax</span>
+                </div>
+                <p class="partner-subtitle">Partner Portal</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/partnership/signup.js"></script>
+</body>
+</html>
